@@ -1,3 +1,4 @@
+![Nextcloud_Logo.svg](https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/113px-Nextcloud_Logo.svg.png)
 # Вход 
 Заходим для регистрации: `http://172.24.0.5`
 
