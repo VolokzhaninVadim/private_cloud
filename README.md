@@ -118,10 +118,14 @@ sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 
 Исходный конфиг взял [отсюда](https://github.com/linuxlifepage/nextcloud).
 
-# Разблокировка пользователя 
+# Смартфон
+Приложение Nextcloud для смартфона устанавливаем через [FDroid](https://f-droid.org/).
+
+# FAQ
+## Разблокировка пользователя 
 `docker exec -u 33 container_id ./occ user:enable volokzhanin`
 
-# Сбросить пароль пользователя 
+## Сбросить пароль пользователя 
 ```
 # Заходим в контейнер
 docker exec -it --user 33 <docker id> bash
@@ -129,7 +133,7 @@ docker exec -it --user 33 <docker id> bash
 php occ user:resetpassword YOUR_USER
 ```
 
-# Fix ошибки в transmisiion "Unable to save resume file: Permission denied"
+## Fix ошибки в transmisiion "Unable to save resume file: Permission denied"
 ```
 # Получаем container id 
 docker ps
@@ -138,7 +142,7 @@ docker exec -it container_id   bash
 # Изменяем права
 chown -R abc:users /downloads
 ```
-# Fix ошибки "Слишком много попыток авторизации":
+## Fix ошибки "Слишком много попыток авторизации":
 ```
 # Входим в docker pg nextcloud
 docker exec -ti pg-server /bin/bash
