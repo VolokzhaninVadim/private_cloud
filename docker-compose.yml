@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  proxy:
+  nginx-proxy:
     image: jwilder/nginx-proxy:alpine
     labels:
       - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
@@ -14,13 +14,29 @@ services:
       - 445:80
       - 446:443
     volumes:
-      - ./proxy/conf.d/my_custom_proxy_settings.conf:/etc/nginx/conf.d/my_custom_proxy_settings.conf
       - ./proxy/conf.d:/etc/nginx/conf.d:rw
       - ./proxy/vhost.d:/etc/nginx/vhost.d:rw
       - ./proxy/html:/usr/share/nginx/html:rw
       - ./proxy/certs:/etc/nginx/certs:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./proxy/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
+    restart: unless-stopped
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: nextcloud-letsencrypt
+    depends_on:
+      - nginx-proxy
+    networks:
+      nextcloud_network:
+            ipv4_address: 172.24.0.4
+    volumes:
+      - ./proxy/vhost.d:/etc/nginx/vhost.d:rw
+      - ./proxy/html:/usr/share/nginx/html:rw
+      - ./proxy/certs:/etc/nginx/certs:rw
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped
    
   db:
@@ -43,8 +59,9 @@ services:
       nextcloud_network:
             ipv4_address: 172.24.0.5
     depends_on:
-      - proxy
+      - nginx-proxy
       - db
+      - letsencrypt
     volumes:
       - ./nextcloud:/var/www/html
       - ./app/config:/var/www/html/config
@@ -60,8 +77,13 @@ services:
       - /mnt/backup/photo/:/photo
       - /mnt/backup/my videos/:/my videos
       - /mnt/media/share/:/share
+      - /mnt/backup/cources/:/cources
     environment:
-      - VIRTUAL_HOST=${EXTERNAL_IP}
+      - VIRTUAL_HOST=${EXTERNAL_URL}
+      - OVERWRITECLIURL=https://${EXTERNAL_URL}:2446
+      - OVERWRITEPROTOCOL=https
+      - LETSENCRYPT_HOST=${EXTERNAL_URL}
+      - LETSENCRYPT_EMAIL=${EMAIL}
     restart: unless-stopped  
 
   onlyoffice:
@@ -71,15 +93,13 @@ services:
             ipv4_address: 172.24.0.6
     image: onlyoffice/documentserver:latest
     depends_on:
-      - proxy
+      - nginx-proxy
       - db
       - app
     restart: always
     volumes:
       - ./DocumentServer/data:/var/www/onlyoffice/Data
-      - ./proxy/certs/dhparam.pem:/var/www/onlyoffice/Data/certs/dhparam.pem
-      - ./proxy/certs/test.cakecloud.info/key.pem:/var/www/onlyoffice/Data/certs/onlyoffice.key
-      - ./proxy/certs/test.cakecloud.info/cert.pem:/var/www/onlyoffice/Data/certs/onlyoffice.crt
+      - ./proxy/certs/:/var/www/onlyoffice/Data/certs
     environment:
       - JWT_ENABLED=true
       - JWT_SECRET=${ONLYOFFICE_SECRET}
