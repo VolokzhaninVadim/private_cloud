@@ -119,7 +119,8 @@ sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 Исходный конфиг взял [отсюда](https://github.com/linuxlifepage/nextcloud).
 
 # Смартфон
-Приложение Nextcloud для смартфона устанавливаем через [FDroid](https://f-droid.org/).
+1. Приложение Nextcloud для смартфона устанавливаем через [FDroid](https://f-droid.org/).
+1. Приложение для синхронизации [DAVx⁵](https://www.davx5.com/tested-with/nextcloud) устанавливаем также через [FDroid](https://f-droid.org/).
 
 # FAQ
 ## Разблокировка пользователя 
