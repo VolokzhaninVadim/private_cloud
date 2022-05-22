@@ -78,15 +78,7 @@ $CONFIG = array (
 )
 );
 ```
-Копироват и вставлять не все значения.
-
-# Onlyoffice
-Устанавливаем: [ONLYOFFICE](https://apps.nextcloud.com/apps/onlyoffice). 
-
-![only_office.png](https://upload.wikimedia.org/wikipedia/commons/d/d9/Logo_light_tl.png)
-
-Адрес службы редактирования документов: `ONLYOFFICE_http://IP/`.
-Секретный ключ (оставьте пустым для отключения): вставляем ключ из docker-compose. 
+Копировать и вставлять не все значения.
 
 # Backup 
 Перемещаем все файлы в целевую папку и изменяем права. 
