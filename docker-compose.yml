@@ -83,28 +83,7 @@ services:
       - OVERWRITEPROTOCOL=https
       - LETSENCRYPT_HOST=${EXTERNAL_URL}
       - LETSENCRYPT_EMAIL=${EMAIL}
-    restart: unless-stopped  
-
-  onlyoffice:
-    container_name: onlyoffice-documentserver
-    networks:
-      nextcloud_network:
-            ipv4_address: 172.24.0.6
-    image: onlyoffice/documentserver:latest
-    depends_on:
-      - nginx-proxy
-      - db
-      - app
-    restart: always
-    volumes:
-      - ./DocumentServer/data:/var/www/onlyoffice/Data
-      - ./proxy/certs/:/var/www/onlyoffice/Data/certs
-    environment:
-      - JWT_ENABLED=true
-      - JWT_SECRET=${ONLYOFFICE_SECRET}
-    ports:
-      - '8889:80'
-      - '4443:443'    
+    restart: unless-stopped   
 networks:
     nextcloud_network:
       driver: bridge
