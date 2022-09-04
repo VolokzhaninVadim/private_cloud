@@ -1,16 +1,16 @@
 ![Nextcloud_Logo.svg](https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/113px-Nextcloud_Logo.svg.png)
-# Вход 
-Заходим для регистрации: `http://172.24.0.5`
+# Launch 
+Launch: `http://172.24.0.5`
 
-# Создаем базу данных
+# Create data base
 ```
-# Получаем container id 
+# Get container id 
 docker ps
-# Заходим в контейнер 
+# Log in container  
 docker exec -it container_id   bash
 ```
 
-Взодим в postgres: `psql -U postgres` и выполняем:
+Log in postgres: `psql -U postgres` and execute:
 ```
 CREATE DATABASE nextcloud TEMPLATE template0 ENCODING 'UNICODE';
 create user nextcloud with encrypted password 'PASSWORD';
@@ -18,7 +18,7 @@ ALTER DATABASE nextcloud OWNER TO nextcloud;
 GRANT ALL PRIVILEGES ON DATABASE nextcloud TO nextcloud;
 \q
 ```
-На странице аутентификации ввести учетные данные базы данных. 
+In authentication page set yor access data.
 
 # Proxy
 ```
@@ -26,9 +26,9 @@ sudo rm -rf ./proxy/conf.d/my_custom_proxy_settings.conf
 sudo touch ./proxy/conf.d/my_custom_proxy_settings.conf
 sudo nano  ./proxy/conf.d/my_custom_proxy_settings.conf 
 ```
-Вставляем: `client_max_body_size 5000m;`
+Set: `client_max_body_size 5000m;`
 
-# Редактируем конфиг
+# Edit the congig
 `sudo nano ./app/config/config.php`
 
 ```
@@ -78,75 +78,76 @@ $CONFIG = array (
 )
 );
 ```
-Копировать и вставлять не все значения.
+Note: copy and insert not all values.
 
 # Backup 
-Перемещаем все файлы в целевую папку и изменяем права. 
+Moving all files in 1 folder and change access rights. 
+
 ```
-# Получаем container id 
+# Get container id 
 docker ps
-# Заходим в контейнер 
+# Log in container 
 docker exec -it container_id   bash
-# Переходим в папку
+# Pass in folder
 cd data/volokzhanin/files
-# Смотрим права 
+# View access rights 
 ls -la
-# Меняем права у необходимой папке 
+# Change access rights on necessary folder
 chown -R www-data:www-data /var/www/html/
 chown -R www-data:www-data /external_storage/
 ```
-Добавляем в группу пользователя: 
+Add user in group:
 ```
-# Добавляем нашего пользователя в группу docker
+# Add our user in docker group 
 sudo usermod -aG http $USER
-# Активируем изменения в группе
+# Apply access rights in group
 newgrp http 
-# Проверяем группы пользователя 
+# Check user groups 
 groups
-# Изменяем права для группы
+# Change access rights for group 
 sudo chown -R http:volokzhanin /mnt/0/backup/vvy_work_backup  
 sudo chmod -R 774 /mnt/0/backup/vvy_work_backup 
 ```
 
-Исходный конфиг взял [отсюда](https://github.com/linuxlifepage/nextcloud).
+[Сource  config](https://github.com/linuxlifepage/nextcloud).
 
-# Смартфон
-1. Приложение Nextcloud для смартфона устанавливаем через [FDroid](https://f-droid.org/).
-1. Приложение для синхронизации [DAVx⁵](https://www.davx5.com/tested-with/nextcloud) устанавливаем также через [FDroid](https://f-droid.org/).
-1. Приложение для двухфакторной авторизации [FreeOTP+ ](https://f-droid.org/ru/packages/org.liberty.android.freeotpplus/) устанавливаем также через [FDroid](https://f-droid.org/).
+# Smartphone
+1. Nextcloud app for smartphone install via [FDroid](https://f-droid.org/).
+1. App for syncing [DAVx⁵](https://www.davx5.com/tested-with/nextcloud) устанавливаем также через [FDroid](https://f-droid.org/).
+1. App for two-factor authorization [FreeOTP+ ](https://f-droid.org/ru/packages/org.liberty.android.freeotpplus/). Install via [FDroid](https://f-droid.org/).
 
 # FAQ
-## Разблокировка пользователя 
+## Unblocking user 
 `docker exec -u 33 container_id ./occ user:enable volokzhanin`
 
-## Сбросить пароль пользователя 
+## Reset user password 
 ```
-# Заходим в контейнер
+# Log in container
 docker exec -it --user 33 <docker id> bash
-# Сбрасываем пароль
+# Reset user password
 php occ user:resetpassword YOUR_USER
 ```
 
-## Fix ошибки в transmisiion "Unable to save resume file: Permission denied"
+## Fix error in transmisiion "Unable to save resume file: Permission denied"
 ```
-# Получаем container id 
+# Get container id 
 docker ps
-# Заходим в контейнер 
+# Log in container 
 docker exec -it container_id   bash
-# Изменяем права
+# Change access rights
 chown -R abc:users /downloads
 ```
-## Fix ошибки "Слишком много попыток авторизации":
+## Fix error "Слишком много попыток авторизации":
 ```
-# Входим в docker pg nextcloud
+# Log in docker pg nextcloud
 docker exec -ti pg-server /bin/bash
 
-# Запустим psql
+# Launch psql
 psql -U db_user -W --dbname=cloud_db
 
-# Проверим, сколько записей в таблице
+# Check count rows in table
 select count(*) from oc_bruteforce_attempts;
 
-# Очистищаем таблицу	
+# Truncate table	
 truncate oc_bruteforce_attempts RESTART IDENTITY;
 ```
