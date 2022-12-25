@@ -2,7 +2,7 @@
 # Launch 
 Launch: `http://172.24.0.5`
 
-# Create data base
+# Create database
 ```
 # Get container id 
 docker ps
