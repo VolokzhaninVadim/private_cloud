@@ -77,7 +77,7 @@ services:
       - /mnt/backup/my videos/:/my videos
       - /mnt/media/share/:/share
       - /mnt/backup/cources/:/cources
-      - /home/volokzhanin/docker/private_library/books:/books
+      - /mnt/backup/books:/books
     environment:
       - VIRTUAL_HOST=${EXTERNAL_URL}
       - OVERWRITECLIURL=https://${EXTERNAL_URL}:2446
