@@ -2,3 +2,4 @@ DocumentServer/*
 app/*
 nextcloud/*
 proxy/*
+db-data/*

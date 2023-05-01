@@ -1,12 +1,12 @@
 ![Nextcloud_Logo.svg](https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/113px-Nextcloud_Logo.svg.png)
-# Launch 
+# Launch
 Launch: `http://172.24.0.5`
 
 # Create database
 ```
-# Get container id 
+# Get container id
 docker ps
-# Log in container  
+# Log in container
 docker exec -it container_id   bash
 ```
 
@@ -24,7 +24,7 @@ In authentication page set yor access data.
 ```
 sudo rm -rf ./proxy/conf.d/my_custom_proxy_settings.conf
 sudo touch ./proxy/conf.d/my_custom_proxy_settings.conf
-sudo nano  ./proxy/conf.d/my_custom_proxy_settings.conf 
+sudo nano  ./proxy/conf.d/my_custom_proxy_settings.conf
 ```
 Set: `client_max_body_size 5000m;`
 
@@ -80,17 +80,17 @@ $CONFIG = array (
 ```
 Note: copy and insert not all values.
 
-# Backup 
-Moving all files in 1 folder and change access rights. 
+# Backup
+Moving all files in 1 folder and change access rights.
 
 ```
-# Get container id 
+# Get container id
 docker ps
-# Log in container 
+# Log in container
 docker exec -it container_id   bash
 # Pass in folder
 cd data/volokzhanin/files
-# View access rights 
+# View access rights
 ls -la
 # Change access rights on necessary folder
 chown -R www-data:www-data /var/www/html/
@@ -98,15 +98,15 @@ chown -R www-data:www-data /external_storage/
 ```
 Add user in group:
 ```
-# Add our user in docker group 
+# Add our user in docker group
 sudo usermod -aG http $USER
 # Apply access rights in group
-newgrp http 
-# Check user groups 
+newgrp http
+# Check user groups
 groups
-# Change access rights for group 
-sudo chown -R http:volokzhanin /mnt/0/backup/vvy_work_backup  
-sudo chmod -R 774 /mnt/0/backup/vvy_work_backup 
+# Change access rights for group
+sudo chown -R http:volokzhanin /mnt/0/backup/vvy_work_backup
+sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 ```
 
 [Сource  config](https://github.com/linuxlifepage/nextcloud).
@@ -116,18 +116,18 @@ sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 1. App for syncing [DAVx⁵](https://www.davx5.com/tested-with/nextcloud) устанавливаем также через [FDroid](https://f-droid.org/).
 1. App for two-factor authorization [FreeOTP+ ](https://f-droid.org/ru/packages/org.liberty.android.freeotpplus/). Install via [FDroid](https://f-droid.org/).
 
-# Cron 
+# Cron
 ```
-# Nextcloud 
+# Nextcloud
 @daily docker exec -u www-data nextcloud-app php /var/www/html/occ maps:scan-photos
 @daily docker exec -u www-data nextcloud-app php -f /var/www/html/cron.php
 ```
 
 # FAQ
-## Unblocking user 
+## Unblocking user
 `docker exec -u 33 container_id ./occ user:enable volokzhanin`
 
-## Reset user password 
+## Reset user password
 ```
 # Log in container
 docker exec -it --user 33 <docker id> bash
@@ -137,9 +137,9 @@ php occ user:resetpassword YOUR_USER
 
 ## Fix error in transmisiion "Unable to save resume file: Permission denied"
 ```
-# Get container id 
+# Get container id
 docker ps
-# Log in container 
+# Log in container
 docker exec -it container_id   bash
 # Change access rights
 chown -R abc:users /downloads
@@ -155,6 +155,14 @@ psql -U db_user -W --dbname=cloud_db
 # Check count rows in table
 select count(*) from oc_bruteforce_attempts;
 
-# Truncate table	
+# Truncate table
 truncate oc_bruteforce_attempts RESTART IDENTITY;
+```
+## Fix upgrade occ (upgrade nextcloud version)
+```
+# Log in container
+docker exec -it --user 33 <docker id> bash
+# Upgrade occ
+php occ upgrade
+php occ maintenance:mode --off
 ```
