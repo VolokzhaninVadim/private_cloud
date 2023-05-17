@@ -84,6 +84,8 @@ services:
       - OVERWRITEPROTOCOL=https
       - LETSENCRYPT_HOST=${EXTERNAL_URL}
       - LETSENCRYPT_EMAIL=${EMAIL}
+      - NEXTCLOUD_HOSTNAME='My cloud'               
+      - NEXTCLOUD_TRUSTED_DOMAINS=https://${EXTERNAL_URL}:2446
     restart: unless-stopped   
 networks:
     nextcloud_network:
