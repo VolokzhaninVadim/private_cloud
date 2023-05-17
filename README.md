@@ -109,6 +109,8 @@ sudo chown -R http:volokzhanin /mnt/0/backup/vvy_work_backup
 sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 ```
 
+For backub use `private_cloud_backup.sh` and [dag airflow](https://github.com/VolokzhaninVadim/airflow/blob/main/dags/backup_s3.py).
+
 [Сource  config](https://github.com/linuxlifepage/nextcloud).
 
 # Smartphone
