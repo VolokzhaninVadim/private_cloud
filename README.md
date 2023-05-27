@@ -109,7 +109,7 @@ sudo chown -R http:volokzhanin /mnt/0/backup/vvy_work_backup
 sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 ```
 
-For backup use `private_cloud_backup.sh` and [dag airflow](https://github.com/VolokzhaninVadim/airflow/blob/main/dags/update_docker_s3.py).
+For backup use [private_cloud_backup.sh](./private_cloud_backup.sh) and [dag airflow](https://github.com/VolokzhaninVadim/airflow/blob/main/dags/update_docker_s3.py).
 
 [Сource  config](https://github.com/linuxlifepage/nextcloud).
 
