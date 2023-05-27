@@ -78,6 +78,7 @@ services:
       - /mnt/media/share/:/share
       - /mnt/backup/cources/:/cources
       - /mnt/backup/books:/books
+      - /mnt/media/pictures/wallpapers/:/wallpapers
     environment:
       - VIRTUAL_HOST=${EXTERNAL_URL}
       - OVERWRITECLIURL=https://${EXTERNAL_URL}:2446
