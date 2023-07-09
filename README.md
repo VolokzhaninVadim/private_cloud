@@ -81,7 +81,8 @@ $CONFIG = array (
 Note: copy and insert not all values.
 
 # Backup
-Moving all files in 1 folder and change access rights.
+For backup use [backup.sh](./dns_backup.sh) and [unzip.sh](./unzip.sh).<br>
+[Yandex s3](https://cloud.yandex.ru/docs/storage/tools/s3fs).
 
 ```
 # Get container id
