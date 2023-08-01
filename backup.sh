@@ -2,7 +2,7 @@
 
 echo $(date '+%Y-%m-%d %H %M %S') 'Create variables'
 FILE=$(date '+%Y-%m-%d_%H_%M_%S')
-ARCHIVE_TYPE='tgz'
+ARCHIVE_TYPE='zst'
 GPG_TYPE='gpg'
 PROJECT='private_cloud'
 DIRECTORY_SOURCE='/home/volokzhanin/server/repos/cloud/'$PROJECT
@@ -13,7 +13,7 @@ GPG_PASSPHRASE=/home/volokzhanin/.gnupg/backup_passphrase
 
 echo $(date '+%Y-%m-%d %H %M %S') 'Create archive'
 tar --create \
-    --gzip \
+    --zstd \
     --file=$DIRECTORY_TARGET/$FILE'_'$PROJECT'_''.'$ARCHIVE_TYPE \
     --ignore-failed-read \
     --preserve-permissions \
