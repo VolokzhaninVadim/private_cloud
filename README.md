@@ -81,7 +81,8 @@ $CONFIG = array (
 Note: copy and insert not all values.
 
 # Backup
-For backup use [backup.sh](./backup.sh) and [unzip.sh](./unzip.sh).<br>
+For backup use: [backup.sh](./backup.sh), [backup_document.sh](./backup_document.sh), [backup_photo_video.sh](./backup_photo_video.sh) and [unzip.sh](./unzip.sh).<br>
+For differential archives use `--listed-incremental=$BACKUP/*.snar` parameter.<br>
 [Yandex s3](https://cloud.yandex.ru/docs/storage/tools/s3fs).
 
 ```
