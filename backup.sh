@@ -32,7 +32,8 @@ echo $(date '+%Y-%m-%d %H %M %S') 'Remove archive'
 rm $DIRECTORY_TARGET/$FILE'_'$PROJECT'_''.'$ARCHIVE_TYPE
 
 echo $(date '+%Y-%m-%d %H %M %S') 'Move file'
-mv $DIRECTORY_TARGET/$FILE'_'$PROJECT'_''.'$ARCHIVE_TYPE'.'$GPG_TYPE $DIRECTORY_S3
+rsync --partial --progress $DIRECTORY_TARGET/$FILE'_'$PROJECT'_''.'$ARCHIVE_TYPE'.'$GPG_TYPE $DIRECTORY_S3
+rm $DIRECTORY_TARGET/$FILE'_'$PROJECT'_''.'$ARCHIVE_TYPE'.'$GPG_TYPE
 
 echo $(date '+%Y-%m-%d %H %M %S') 'Delete files older than n days'
 find $DIRECTORY_S3 -mtime +20 \
