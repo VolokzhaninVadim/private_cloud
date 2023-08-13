@@ -1,4 +1,4 @@
-version: '3' 
+version: '3'
 
 services:
 
@@ -37,7 +37,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped
-   
+
   db:
     image: postgres:13
     container_name: nextcloud-postgres
@@ -50,7 +50,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
     restart: unless-stopped
-  
+
   app:
     image: nextcloud:latest
     container_name: nextcloud-app
@@ -74,7 +74,7 @@ services:
       - /mnt/backup/backup/vvy_smartphones/camera/:/camera_vvy
       - /mnt/backup/backup/angel_smartphones/camera_device_angel/:/camera_device_angel
       - /mnt/backup/photo/:/photo
-      - /mnt/backup/my videos/:/my videos
+      - /mnt/backup/video/:/my videos
       - /mnt/media/share/:/share
       - /mnt/backup/cources/:/cources
       - /mnt/backup/books:/books
@@ -85,9 +85,9 @@ services:
       - OVERWRITEPROTOCOL=https
       - LETSENCRYPT_HOST=${EXTERNAL_URL}
       - LETSENCRYPT_EMAIL=${EMAIL}
-      - NEXTCLOUD_HOSTNAME='My cloud'               
+      - NEXTCLOUD_HOSTNAME='My cloud'
       - NEXTCLOUD_TRUSTED_DOMAINS=https://${EXTERNAL_URL}:2446
-    restart: unless-stopped   
+    restart: unless-stopped
 networks:
     nextcloud_network:
       driver: bridge
