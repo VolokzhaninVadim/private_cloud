@@ -3,4 +3,3 @@ app/*
 nextcloud/*
 proxy/*
 db-data/*
-*.snar
