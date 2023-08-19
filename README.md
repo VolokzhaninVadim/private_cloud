@@ -1,6 +1,4 @@
 ![Nextcloud_Logo.svg](https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/113px-Nextcloud_Logo.svg.png)
-# Launch
-Launch: `http://172.24.0.5`
 
 # Create database
 ```
@@ -20,71 +18,15 @@ GRANT ALL PRIVILEGES ON DATABASE nextcloud TO nextcloud;
 ```
 In authentication page set yor access data.
 
-# Proxy
-```
-sudo rm -rf ./proxy/conf.d/my_custom_proxy_settings.conf
-sudo touch ./proxy/conf.d/my_custom_proxy_settings.conf
-sudo nano  ./proxy/conf.d/my_custom_proxy_settings.conf
-```
-Set: `client_max_body_size 5000m;`
-
 # Edit the congig
 `sudo nano ./app/config/config.php`
 
-```
-  <?php
-$CONFIG = array (
-  'htaccess.RewriteBase' => '/',
-  'memcache.local' => '\\OC\\Memcache\\APCu',
-  'apps_paths' =>
-  array (
-    0 =>
-    array (
-      'path' => '/var/www/html/apps',
-      'url' => '/apps',
-      'writable' => false,
-    ),
-    1 =>
-    array (
-      'path' => '/var/www/html/custom_apps',
-      'url' => '/custom_apps',
-      'writable' => true,
-    ),
-  ),
-  'filelocking.enabled' => false,
-  'instanceid' => '<instanceid>',
-  'passwordsalt' => '<passwordsalt>',
-  'secret' => '<secret>',
-  'trusted_domains' =>
-  array (
-    0 => '172.24.0.5',
-    1 => '<external IP>',
-  ),
-  'datadirectory' => '/var/www/html/data',
-  'dbtype' => 'pgsql',
-  'version' => '21.0.2.1',
-  'overwrite.cli.url' => 'http://<external IP>',
-  'dbname' => 'nextcloud',
-  'dbuser' => 'nextcloud',
-  'dbpassword' => '<nextcloud password>',
-  'dbhost' => '172.24.0.7',
-  'dbtableprefix' => 'oc_',
-  'dbport' => '',
-  'installed' => true,
-  'check_data_directory_permissions' => false,
-  'allow_local_remote_servers' => true,
-  'onlyoffice' => array (
-    'verify_peer_off' => true
-)
-);
-```
-Note: copy and insert not all values.
 
 # Backup
-For backup use: [backup.sh](./backup.sh), [backup_document.sh](./backup_document.sh), [backup_photo_video.sh](./backup_photo_video.sh) and [unzip.sh](./unzip.sh).<br>
-For differential archives use `--listed-incremental*.snar` parameter.<br>
+For backup use: [backup.sh](./backup.sh) and [unzip.sh](./unzip.sh).<br>
 [Yandex s3](https://cloud.yandex.ru/docs/storage/tools/s3fs).
 
+View access rights
 ```
 # Get container id
 docker ps
@@ -110,10 +52,6 @@ groups
 sudo chown -R http:volokzhanin /mnt/0/backup/vvy_work_backup
 sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 ```
-
-For backup use [private_cloud_backup.sh](./private_cloud_backup.sh) and [dag airflow](https://github.com/VolokzhaninVadim/airflow/blob/main/dags/update_docker_s3.py).
-
-[Сource  config](https://github.com/linuxlifepage/nextcloud).
 
 # Smartphone
 1. Nextcloud app for smartphone install via [FDroid](https://f-droid.org/).
