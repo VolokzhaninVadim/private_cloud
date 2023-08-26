@@ -44,6 +44,16 @@ services:
       - LETSENCRYPT_EMAIL=${EMAIL}
       - NEXTCLOUD_HOSTNAME='My cloud'
       - NEXTCLOUD_TRUSTED_DOMAINS=https://nextcloud.${EXTERNAL_URL}
+      - REDIS_HOST=redis
+    restart: unless-stopped
+    networks:
+      - default
+
+  redis:
+    image: redis:alpine
+    container_name: nextcloud-redis
+    volumes:
+      - ./config_redis:/data
     restart: unless-stopped
     networks:
       - default
