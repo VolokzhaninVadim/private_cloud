@@ -59,7 +59,7 @@ sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 1. App for two-factor authorization [FreeOTP+ ](https://f-droid.org/ru/packages/org.liberty.android.freeotpplus/). Install via [FDroid](https://f-droid.org/).
 
 # PC (Manjaro Linux)
-1. Install syncthing: `pacman -S syncthing`
+1. Install syncthing: `sudo pacman -S syncthing`
 
 # Cron
 ```
