@@ -25,17 +25,8 @@ services:
       - ./app/data:/var/www/html/data
       - ./app/themes:/var/www/html/themes
       - /etc/localtime:/etc/localtime
-      - /mnt/backup/documents/:/documents
-      - /mnt/backup/backup/vvy_smartphones/record_call_vvy/:/record_call_vvy
-      - /mnt/backup/backup/vvy_backup_work/:/vvy_backup_work
-      - /mnt/backup/backup/vvy_smartphones/camera/:/camera_vvy
-      - /mnt/backup/backup/angel_smartphones/camera_device_angel/:/camera_device_angel
-      - /mnt/backup/photo/:/photo
-      - /mnt/backup/video/:/my videos
-      - /mnt/media/share/:/share
-      - /mnt/backup/cources/:/cources
-      - /mnt/backup/books:/books
-      - /mnt/media/pictures/wallpapers/:/wallpapers
+      - /mnt/backup:/mnt/backup
+      - /mnt/media:/mnt/media
     environment:
       - VIRTUAL_HOST=${EXTERNAL_URL}
       - OVERWRITECLIURL=https://nextcloud.${EXTERNAL_URL}
@@ -67,8 +58,7 @@ services:
       - PGID=1000
     volumes:
       - ./config_syncthing:/config
-      - /mnt/backup/backup:/backup
-      - /home/volokzhanin/server/repos/cloud/private_cloud/app/data/volokzhanin/files/Заметки:/notes
+      - /mnt/backup:/mnt/backup
     # ports:
     #   - 8384:8384 # Web UI
     #   - 22000:22000/tcp # TCP file transfers
