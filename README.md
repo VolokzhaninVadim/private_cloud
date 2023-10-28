@@ -21,11 +21,6 @@ In authentication page set yor access data.
 # Edit the congig
 `sudo nano ./app/config/config.php`
 
-
-# Backup
-For backup use: [backup.sh](./backup.sh) and [unzip.sh](./unzip.sh).<br>
-[Yandex s3](https://cloud.yandex.ru/docs/storage/tools/s3fs).
-
 View access rights
 ```
 # Get container id
