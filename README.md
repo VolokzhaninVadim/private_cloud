@@ -62,6 +62,8 @@ sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 @daily docker exec -u www-data nextcloud-app php /var/www/html/occ maps:scan-photos
 @daily docker exec -u www-data nextcloud-app php -f /var/www/html/cron.php
 ```
+# Backup
+For backup use [backup-server](https://github.com/VolokzhaninVadim/duplicati).
 
 # FAQ
 ## Unblocking user
