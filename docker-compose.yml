@@ -68,6 +68,30 @@ services:
     networks:
       - default
 
+  elasticsearch:
+    image: nextcloud/aio-fulltextsearch:latest
+    container_name: nextcloud-elasticsearch
+    hostname: elasticsearch
+    environment:
+      - ES_JAVA_OPTS=-Xms512M -Xmx512M
+      - bootstrap.memory_lock=true
+      - cluster.name=nextcloud-aio
+      - discovery.type=single-node
+      - logger.org.elasticsearch.discovery=WARN
+      - http.port=9200
+      - xpack.license.self_generated.type=basic
+      - xpack.security.enabled=false
+    volumes:
+      - /mnt/backup/documents/docker/private_cloud/config_elasticsearch:/usr/share/elasticsearch/data:rw
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '6'
+          memory: 8192m
+    networks:
+      - default
+
 networks:
   default:
     external: true
