@@ -73,9 +73,9 @@ services:
     container_name: nextcloud-elasticsearch
     hostname: elasticsearch
     environment:
-      - ES_JAVA_OPTS=-Xms512M -Xmx512M
+      - ES_JAVA_OPTS=-Xms512m -Xms512m
       - bootstrap.memory_lock=true
-      - cluster.name=nextcloud-aio
+      - cluster.name=nextcloud
       - discovery.type=single-node
       - logger.org.elasticsearch.discovery=WARN
       - http.port=9200
@@ -83,6 +83,9 @@ services:
       - xpack.security.enabled=false
     volumes:
       - /mnt/backup/documents/docker/private_cloud/config_elasticsearch:/usr/share/elasticsearch/data:rw
+#    ports:
+#      - 9200:9200
+#      - 9300:9300
     restart: unless-stopped
     deploy:
       resources:
