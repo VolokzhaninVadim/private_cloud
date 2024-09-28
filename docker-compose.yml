@@ -1,15 +1,14 @@
-version: '3'
-
 services:
   db:
     image: postgres:13
     container_name: nextcloud-postgres
     volumes:
-      - /mnt/backup/documents/docker/private_cloud/db-data:/var/lib/postgresql/data
+      - ./db-data:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
     environment:
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
     restart: unless-stopped
+    env_file: .env
     networks:
       - default
 
@@ -19,15 +18,18 @@ services:
     depends_on:
       - db
     volumes:
-      - /mnt/backup/documents/docker/private_cloud/nextcloud:/var/www/html
-      - /mnt/backup/documents/docker/private_cloud/app/config:/var/www/html/config
-      - /mnt/backup/documents/docker/private_cloud/app/custom_apps:/var/www/html/custom_apps
-      - /mnt/backup/documents/docker/private_cloud/app/data:/var/www/html/data
-      - /mnt/backup/documents/docker/private_cloud/app/themes:/var/www/html/themes
+      - ./nextcloud:/var/www/html
+      - ./app/config:/var/www/html/config
+      - ./app/custom_apps:/var/www/html/custom_apps
+      - ./app/data:/var/www/html/data
+      - ./app/themes:/var/www/html/themes
       - /etc/localtime:/etc/localtime
-      - /mnt/backup:/mnt/backup
-      - /mnt/media:/mnt/media
-    environment:
+     # - /mnt/backup:/mnt/backup
+     # - /mnt/media:/mnt/media
+     ports:
+      - 80:80
+      - 443:443
+     environment:
       - VIRTUAL_HOST=${EXTERNAL_URL}
       - OVERWRITECLIURL=https://nextcloud.${EXTERNAL_URL}
       - OVERWRITEPROTOCOL=https
@@ -37,6 +39,7 @@ services:
       - NEXTCLOUD_TRUSTED_DOMAINS=https://nextcloud.${EXTERNAL_URL}
       - REDIS_HOST=redis
     restart: unless-stopped
+    env_file: .env
     networks:
       - default
 
@@ -44,7 +47,7 @@ services:
     image: redis:alpine
     container_name: nextcloud-redis
     volumes:
-      - /mnt/backup/documents/docker/private_cloud/config_redis:/data
+      - ./config_redis:/data
     restart: unless-stopped
     networks:
       - default
@@ -57,13 +60,13 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - /mnt/backup/documents/docker/private_cloud/config_syncthing:/config
-      - /mnt/backup:/mnt/backup
-    # ports:
-    #   - 8384:8384 # Web UI
-    #   - 22000:22000/tcp # TCP file transfers
-    #   - 22000:22000/udp # QUIC file transfers
-    #   - 21027:21027/udp # Receive local discovery broadcasts
+      - ./config_syncthing:/config
+     # - /mnt/backup:/mnt/backup
+    ports:
+       - 8384:8384 # Web UI
+       - 22000:22000/tcp # TCP file transfers
+       - 22000:22000/udp # QUIC file transfers
+       - 21027:21027/udp # Receive local discovery broadcasts
     restart: unless-stopped
     networks:
       - default
@@ -82,15 +85,15 @@ services:
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
     volumes:
-      - /mnt/backup/documents/docker/private_cloud/config_elasticsearch:/usr/share/elasticsearch/data:rw
-#    ports:
-#      - 9200:9200
-#      - 9300:9300
+      - ./config_elasticsearch:/usr/share/elasticsearch/data:rw
+    ports:
+      - 9200:9200
+      - 9300:9300
     restart: unless-stopped
     deploy:
       resources:
         limits:
-          cpus: '6'
+          cpus: '4'
           memory: 8192m
     networks:
       - default
