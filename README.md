@@ -35,16 +35,9 @@ ls -la
 chown -R www-data:www-data /var/www/html/
 chown -R www-data:www-data /external_storage/
 ```
-Add user in group:
+Change access rights for files:
 ```
-# Add our user in docker group
-sudo usermod -aG http $USER
-# Apply access rights in group
-newgrp http
-# Check user groups
-groups
-# Change access rights for group
-sudo chown -R http:volokzhanin /mnt/0/backup/vvy_work_backup
+sudo chown -R www-data:volokzhanin /mnt/0/backup/vvy_work_backup
 sudo chmod -R 774 /mnt/0/backup/vvy_work_backup
 ```
 
