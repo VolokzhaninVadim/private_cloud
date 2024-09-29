@@ -5,4 +5,5 @@ proxy/*
 db-data/*
 config_redis/*
 config_syncthing/*
+config_elasticsearch/*
 .env

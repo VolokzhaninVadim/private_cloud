@@ -7,8 +7,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
+    env_file: ".env"
     restart: unless-stopped
-    env_file: .env
     networks:
       - default
 
@@ -26,10 +26,10 @@ services:
       - /etc/localtime:/etc/localtime
      # - /mnt/backup:/mnt/backup
      # - /mnt/media:/mnt/media
-     ports:
+    ports:
       - 80:80
       - 443:443
-     environment:
+    environment:
       - VIRTUAL_HOST=${EXTERNAL_URL}
       - OVERWRITECLIURL=https://nextcloud.${EXTERNAL_URL}
       - OVERWRITEPROTOCOL=https
@@ -39,7 +39,7 @@ services:
       - NEXTCLOUD_TRUSTED_DOMAINS=https://nextcloud.${EXTERNAL_URL}
       - REDIS_HOST=redis
     restart: unless-stopped
-    env_file: .env
+    env_file: ".env"
     networks:
       - default
 
