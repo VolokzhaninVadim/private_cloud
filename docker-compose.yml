@@ -24,8 +24,7 @@ services:
       - ./app/data:/var/www/html/data
       - ./app/themes:/var/www/html/themes
       - /etc/localtime:/etc/localtime
-     # - /mnt/backup:/mnt/backup
-     # - /mnt/media:/mnt/media
+      - /home/volokzhanin/documents:/mnt/documents
     ports:
       - 80:80
       - 443:443
