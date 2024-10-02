@@ -25,6 +25,7 @@ services:
       - ./app/themes:/var/www/html/themes
       - /etc/localtime:/etc/localtime
       - /home/volokzhanin/documents:/mnt/documents
+      - /mnt/media:/mnt/media 
     ports:
       - 80:80
       - 443:443
@@ -47,25 +48,6 @@ services:
     container_name: nextcloud-redis
     volumes:
       - ./config_redis:/data
-    restart: unless-stopped
-    networks:
-      - default
-
-  syncthing:
-    image: lscr.io/linuxserver/syncthing:latest
-    container_name: syncthing
-    hostname: syncthing
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - ./config_syncthing:/config
-     # - /mnt/backup:/mnt/backup
-    ports:
-       - 8384:8384 # Web UI
-       - 22000:22000/tcp # TCP file transfers
-       - 22000:22000/udp # QUIC file transfers
-       - 21027:21027/udp # Receive local discovery broadcasts
     restart: unless-stopped
     networks:
       - default
