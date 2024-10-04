@@ -25,7 +25,8 @@ services:
       - ./app/themes:/var/www/html/themes
       - /etc/localtime:/etc/localtime
       - /home/volokzhanin/documents:/mnt/documents
-      - /mnt/media:/mnt/media 
+      - /mnt/media:/mnt/media
+      - /mnt/private_media:/mnt/private_media 
     ports:
       - 80:80
       - 443:443
@@ -76,6 +77,26 @@ services:
         limits:
           cpus: '4'
           memory: 8192m
+    networks:
+      - default
+
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    hostname: syncthing
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./config_syncthing:/config
+      - /mnt/private_media:/mnt/private_media
+      - /home/volokzhanin/documents:/mnt/documents 
+    ports:
+       - 8384:8384 # Web UI
+       - 22000:22000/tcp # TCP file transfers
+       - 22000:22000/udp # QUIC file transfers
+       - 21027:21027/udp # Receive local discovery broadcasts
+    restart: unless-stopped
     networks:
       - default
 
