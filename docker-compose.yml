@@ -90,7 +90,7 @@ services:
     volumes:
       - ./config_syncthing:/config
       - /mnt/private_media:/mnt/private_media
-      - /home/volokzhanin/documents:/mnt/documents 
+      - /mnt/documents:/mnt/documents
     ports:
        - 8384:8384 # Web UI
        - 22000:22000/tcp # TCP file transfers
