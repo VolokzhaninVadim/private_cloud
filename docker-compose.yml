@@ -100,6 +100,24 @@ services:
     networks:
       - default
 
+  onlyoffice:
+    container_name: onlyoffice-documentserver
+    image: onlyoffice/documentserver:latest
+    depends_on:
+      - db
+      - app
+    restart: always
+    volumes:
+      - ./config_onlyoffice:/var/www/onlyoffice/Data
+    environment:
+      - JWT_ENABLED=true
+      - JWT_SECRET=${ONLYOFFICE_SECRET}
+    ports:
+      - '8080:80'
+    env_file: ".env"
+    networks:
+      - default
+
 networks:
   default:
     external: true
