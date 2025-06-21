@@ -1,7 +1,6 @@
-DocumentServer/*
+config_onlyoffice/*
 app/*
 nextcloud/*
-proxy/*
 db-data/*
 config_redis/*
 config_syncthing/*
