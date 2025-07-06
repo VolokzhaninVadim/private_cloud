@@ -2,6 +2,7 @@ services:
   db:
     image: postgres:13
     container_name: nextcloud-postgres
+    shm_size: '2gb'
     volumes:
       - ./db-data:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
@@ -39,6 +40,8 @@ services:
       - NEXTCLOUD_HOSTNAME='My cloud'
       - NEXTCLOUD_TRUSTED_DOMAINS=https://nextcloud.${EXTERNAL_URL}
       - REDIS_HOST=redis
+      - PHP_MEMORY_LIMIT=2G
+      - PHP_MAX_EXECUTION_TIME=600
     restart: unless-stopped
     env_file: ".env"
     networks:
