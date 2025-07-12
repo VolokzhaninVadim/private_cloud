@@ -7,17 +7,25 @@ services:
       - ./db-data:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
     environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
     env_file: ".env"
     restart: unless-stopped
     networks:
       - default
+    healthcheck:  # Добавлена проверка здоровья
+      test: ["CMD-SHELL", "pg_isready -U nextcloud"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   app:
     image: nextcloud:latest
     container_name: nextcloud-app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./nextcloud:/var/www/html
       - ./app/config:/var/www/html/config
@@ -32,6 +40,10 @@ services:
       - 80:80
       - 443:443
     environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER= nextcloud
+      - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
       - VIRTUAL_HOST=${EXTERNAL_URL}
       - OVERWRITECLIURL=https://nextcloud.${EXTERNAL_URL}
       - OVERWRITEPROTOCOL=https
@@ -40,12 +52,19 @@ services:
       - NEXTCLOUD_HOSTNAME='My cloud'
       - NEXTCLOUD_TRUSTED_DOMAINS=https://nextcloud.${EXTERNAL_URL}
       - REDIS_HOST=redis
-      - PHP_MEMORY_LIMIT=2G
+      - PHP_MEMORY_LIMIT=4G
       - PHP_MAX_EXECUTION_TIME=600
+      - PHP_UPLOAD_LIMIT=10G
+      - APACHE_DISABLE_REWRITE_IP=1
     restart: unless-stopped
     env_file: ".env"
     networks:
       - default
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/status.php"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   redis:
     image: redis:alpine
@@ -122,6 +141,7 @@ services:
       - default
 
 networks:
-  default:
-    external: true
-    name: volokzhanin
+  default:  
+    name: nextcloud-network
+    driver: bridge
+    attachable: true
