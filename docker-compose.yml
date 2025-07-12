@@ -42,7 +42,7 @@ services:
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_DB=nextcloud
-      - POSTGRES_USER= nextcloud
+      - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
       - VIRTUAL_HOST=${EXTERNAL_URL}
       - OVERWRITECLIURL=https://nextcloud.${EXTERNAL_URL}
@@ -141,7 +141,7 @@ services:
       - default
 
 networks:
-  default:  
+  default:
     name: nextcloud-network
     driver: bridge
     attachable: true
