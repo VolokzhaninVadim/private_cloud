@@ -2,31 +2,17 @@ services:
   db:
     image: postgres:16
     container_name: nextcloud-postgres
+    stop_grace_period: 5m
     shm_size: '2gb'
     volumes:
       - ./db-data:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     environment:
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
-      - POSTGRES_CONFIG="
-          shared_buffers = 4GB
-          work_mem = 32MB
-          maintenance_work_mem = 2GB
-          effective_cache_size = 12GB
-          random_page_cost = 1.1
-          max_parallel_workers_per_gather = 4
-          wal_buffers = 16MB
-          checkpoint_timeout = 30min
-          max_wal_size = 8GB
-          min_wal_size = 2GB
-          autovacuum_vacuum_scale_factor = 0.05
-          autovacuum_analyze_scale_factor = 0.02
-          autovacuum_max_workers = 4
-          idle_in_transaction_session_timeout = 10min
-          log_min_duration_statement = 1000
-        "
     env_file: ".env"
     restart: unless-stopped
     networks:
@@ -40,6 +26,7 @@ services:
   app:
     image: nextcloud:latest
     container_name: nextcloud-app
+    stop_grace_period: 2m
     depends_on:
       db:
         condition: service_healthy
@@ -80,8 +67,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/status.php"]
       interval: 30s
-      timeout: 10s
-      retries: 3
+      timeout: 60s
+      retries: 5
+      start_period: 120s
 
   redis:
     image: redis:alpine
@@ -95,6 +83,7 @@ services:
   elasticsearch:
     image: nextcloud/aio-fulltextsearch:latest
     container_name: nextcloud-elasticsearch
+    stop_grace_period: 3m
     hostname: elasticsearch
     environment:
       - ES_JAVA_OPTS=-Xms4g -Xmx4g
