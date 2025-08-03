@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:13
+    image: postgres:16
     container_name: nextcloud-postgres
     shm_size: '2gb'
     volumes:
@@ -10,11 +10,28 @@ services:
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
+      - POSTGRES_CONFIG="
+          shared_buffers = 4GB
+          work_mem = 32MB
+          maintenance_work_mem = 2GB
+          effective_cache_size = 12GB
+          random_page_cost = 1.1
+          max_parallel_workers_per_gather = 4
+          wal_buffers = 16MB
+          checkpoint_timeout = 30min
+          max_wal_size = 8GB
+          min_wal_size = 2GB
+          autovacuum_vacuum_scale_factor = 0.05
+          autovacuum_analyze_scale_factor = 0.02
+          autovacuum_max_workers = 4
+          idle_in_transaction_session_timeout = 10min
+          log_min_duration_statement = 1000
+        "
     env_file: ".env"
     restart: unless-stopped
     networks:
       - default
-    healthcheck:  # Добавлена проверка здоровья
+    healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nextcloud"]
       interval: 10s
       timeout: 5s
@@ -80,7 +97,7 @@ services:
     container_name: nextcloud-elasticsearch
     hostname: elasticsearch
     environment:
-      - ES_JAVA_OPTS=-Xms512m -Xms512m
+      - ES_JAVA_OPTS=-Xms4g -Xmx4g
       - bootstrap.memory_lock=true
       - cluster.name=nextcloud
       - discovery.type=single-node
@@ -88,12 +105,19 @@ services:
       - http.port=9200
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
+      - indices.query.bool.max_clause_count=8192
     volumes:
       - ./config_elasticsearch:/usr/share/elasticsearch/data:rw
     ports:
       - 9200:9200
       - 9300:9300
     restart: unless-stopped
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    cap_add:
+      - IPC_LOCK
     deploy:
       resources:
         limits:
