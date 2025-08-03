@@ -69,8 +69,8 @@ services:
       - NEXTCLOUD_HOSTNAME='My cloud'
       - NEXTCLOUD_TRUSTED_DOMAINS=https://nextcloud.${EXTERNAL_URL}
       - REDIS_HOST=redis
-      - PHP_MEMORY_LIMIT=4G
-      - PHP_MAX_EXECUTION_TIME=600
+      - PHP_MEMORY_LIMIT=8G
+      - PHP_MAX_EXECUTION_TIME=1200
       - PHP_UPLOAD_LIMIT=10G
       - APACHE_DISABLE_REWRITE_IP=1
     restart: unless-stopped
