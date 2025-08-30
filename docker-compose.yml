@@ -95,8 +95,6 @@ services:
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
       - indices.query.bool.max_clause_count=8192
-      - ingest.attachment.encoded_length_limit=104857600
-      - ingest.attachment.fields=["content", "content_length", "content_type"]
     volumes:
       - ./config_elasticsearch:/usr/share/elasticsearch/data:rw
     ports:
