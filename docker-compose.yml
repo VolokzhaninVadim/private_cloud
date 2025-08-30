@@ -24,7 +24,7 @@ services:
       retries: 5
 
   app:
-    build: .
+    image: nextcloud:latest
     container_name: nextcloud-app
     stop_grace_period: 2m
     depends_on:
@@ -95,11 +95,15 @@ services:
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
       - indices.query.bool.max_clause_count=8192
+      - ingest.attachment.encoded_length_limit=104857600
+      - ingest.attachment.fields=["content", "content_length", "content_type"]
     volumes:
       - ./config_elasticsearch:/usr/share/elasticsearch/data:rw
     ports:
       - 9200:9200
       - 9300:9300
+    dns:
+      - 9.9.9.9
     restart: unless-stopped
     ulimits:
       memlock:
