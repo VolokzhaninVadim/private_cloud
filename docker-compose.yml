@@ -42,24 +42,24 @@ services:
       - /mnt/private_media:/mnt/private_media
     ports:
       - 80:80
-      - 443:443
+#      - 443:443
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_DB=nextcloud
       - POSTGRES_USER=nextcloud
       - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
-      - VIRTUAL_HOST=${EXTERNAL_URL}
-      - OVERWRITECLIURL=https://nextcloud.${EXTERNAL_URL}
       - OVERWRITEPROTOCOL=https
-      - LETSENCRYPT_HOST=${EXTERNAL_URL}
-      - LETSENCRYPT_EMAIL=${EMAIL}
-      - NEXTCLOUD_HOSTNAME='My cloud'
-      - NEXTCLOUD_TRUSTED_DOMAINS=https://nextcloud.${EXTERNAL_URL}
+      - OVERWRITEWEBROOT=/
+      - OVERWRITEHOST=nextcloud.${EXTERNAL_URL}
+      - TRUSTED_DOMAINS=nextcloud.${EXTERNAL_URL}
+      - TRUSTED_DOMAINS=192.168.0.166
+      - NEXTCLOUD_HOSTNAME=My cloud
       - REDIS_HOST=redis
       - PHP_MEMORY_LIMIT=8G
       - PHP_MAX_EXECUTION_TIME=1200
       - PHP_UPLOAD_LIMIT=10G
       - APACHE_DISABLE_REWRITE_IP=1
+      - TRUSTED_PROXIES=172.0.0.0/16
     restart: unless-stopped
     env_file: ".env"
     networks:
@@ -154,6 +154,12 @@ services:
     env_file: ".env"
     networks:
       - default
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/welcome/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
 networks:
   default:
