@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16
+    image: pgvector/pgvector:pg16 #postgres:16
     container_name: nextcloud-postgres
     stop_grace_period: 5m
     shm_size: '2gb'
@@ -76,72 +76,6 @@ services:
     container_name: nextcloud-redis
     volumes:
       - ./config_redis:/data
-    restart: unless-stopped
-    networks:
-      - default
-
-  elasticsearch:
-    image: nextcloud/aio-fulltextsearch:latest
-    depends_on:
-      - db
-      - app
-    container_name: nextcloud-elasticsearch
-    stop_grace_period: 3m
-    hostname: elasticsearch
-    environment:
-      - ES_JAVA_OPTS=-Xms4g -Xmx4g
-      - bootstrap.memory_lock=true
-      - cluster.name=nextcloud
-      - discovery.type=single-node
-      - logger.org.elasticsearch.discovery=WARN
-      - http.port=9200
-      - xpack.license.self_generated.type=basic
-      - xpack.security.enabled=false
-      - indices.query.bool.max_clause_count=8192
-    volumes:
-      - ./config_elasticsearch:/usr/share/elasticsearch/data:rw
-    ports:
-      - 9200:9200
-      - 9300:9300
-    dns:
-      - 9.9.9.9
-    restart: unless-stopped
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    cap_add:
-      - IPC_LOCK
-    deploy:
-      resources:
-        limits:
-          cpus: '4'
-          memory: 8192m
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health?local=true"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
-    networks:
-      - default
-
-  syncthing:
-    image: lscr.io/linuxserver/syncthing:latest
-    container_name: syncthing
-    hostname: syncthing
-    environment:
-      - PUID=33
-      - PGID=33
-    volumes:
-      - ./config_syncthing:/config
-      - /mnt/private_media:/mnt/private_media
-      - /mnt/documents:/mnt/documents
-    ports:
-       - 8384:8384 # Web UI
-       - 22000:22000/tcp # TCP file transfers
-       - 22000:22000/udp # QUIC file transfers
-       - 21027:21027/udp # Receive local discovery broadcasts
     restart: unless-stopped
     networks:
       - default
